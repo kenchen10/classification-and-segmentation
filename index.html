@@ -1,0 +1,608 @@
+<html>
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]} });
+  </script>
+  <title>kenny</title>
+  <meta charset="UTF-8">
+  <style>
+    body,
+    html {
+      font-size: 62.5%
+    }
+
+    body {
+      line-height: 1;
+      font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #666
+    }
+  </style>
+
+</head>
+
+<body>
+</script>
+<div class="post">
+  <title>Project 3 Face Morphing</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 194-26: Image Manipulation and Computational Photography</h1>
+<span class="date">Kenny Chen</span>
+
+<h2>Project 4: Classification and Segmentaion</h1>
+
+<div>
+
+<h3>Overview</h2>
+<p>
+    We will solve classification of images in the Fashion-MNIST dataset and semantic 
+    segmentation of images in mini Facade dataset using Deep Nets. The implementation was done 
+    using PyTorch.
+</p>
+
+<h2>Part 1: Image Classification</h2>
+<p>We used the Fashion-MNIST dataset to train our model. This dataset has 10 classes, T-shirt/top,
+    Trouser,
+    Pullover,
+    Dress,
+    Coat,
+    Sandal,
+    Shirt,
+    Sneaker,
+    Bag,
+    and Ankle boot.</p>
+<h4>Architecture:</h4>
+<p>My architecture consisted of 2 convolutional layers with 32 channels each with size 5 kernels and padding of 2. These 
+    convolutional layers are each followed by a ReLU and max pooling layer with size 2 kernels and stride of 2. I then 
+    use 2 fully connected layers, with the first being followed by a ReLU. I used cross entropy loss and Adam as the optimizer 
+    with a learning rate of .0009. I trained my network for 8 epochs.
+</p>
+<h4>Training and Validation Accuracy:</h4>
+<p>The following is the training and validation accuracy during the training process. I ended up with around 91% overall accuracy.</p>
+<img width="35%" src="imgs/accuracy.png">
+<h4>Per-Class Accuracy:</h4>
+<p>The following is the per-class accuracy of the classifier on the validation and test dataset:</p><br>
+<table>
+    <tr>
+        <th>Class</th>
+        <th>Validation Accuracy</th>
+        <th>Test Accuracy</th>
+    </tr>
+    <tr>
+        <td>T-shirt/top</td>
+        <td>0.850</td>
+        <td>0.828</td>
+    </tr>
+    <tr>
+        <td>Trouser</td>
+        <td>0.987</td>
+        <td>0.985</td>
+    </tr>
+    <tr>
+        <td>Pullover</td>
+        <td>0.878</td>
+        <td>0.875</td>
+    </tr>
+    <tr>
+        <td>Dress</td>
+        <td>0.949</td>
+        <td>0.926</td>
+    </tr>
+    <tr>
+        <td>Coat</td>
+        <td>0.770</td>
+        <td>0.721</td>
+    </tr>
+    <tr>
+        <td>Sandal</td>
+        <td>0.983</td>
+        <td>0.984</td>
+    </tr>
+    <tr>
+        <td>Shirt</td>
+        <td>0.841</td>
+        <td>0.829</td>
+    </tr>
+    <tr>
+        <td>Sneaker</td>
+        <td>0.959</td>
+        <td>0.970</td>
+    </tr>
+    <tr>
+        <td>Bag</td>
+        <td>0.983</td>
+        <td>0.977</td>
+    </tr>
+    <tr>
+        <td>Ankle boot</td>
+        <td>0.970</td>
+        <td>0.963</td>
+    </tr>
+</table>
+<br>
+<p>We can see that the T-shirt/top, Pullover, Coat, and Shirt classes were the hardest 
+    to correctly classify. This is likely because these categories look very similar to each 
+    other. Here we can see this more qualitatively. The left-side classes are the actual class while 
+    the top classes are the predicted.
+</p>
+<br>
+<div class="row">
+    <div class="column">
+        <img src="imgs/val_per_class.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/acc_per_class.png" width="100%">
+    </div>
+</div>
+<br>
+<p>The following are 2 images from each class which the network classifies correctly, and 2 more images where it classifies incorrectly.
+    For many of these, it is easy to see how the network classified incorrectly. As stated before, some of the 
+    classes have similar-looking clothing.
+</p>
+<br>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/00.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/01.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/00.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/01.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/10.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/11.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/10.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/11.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/20.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/21.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/20.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/21.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/30.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/31.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/30.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/31.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/40.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/41.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/40.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/41.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/50.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/51.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/50.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/51.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/60.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/61.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/60.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/61.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/70.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/71.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/70.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/71.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/80.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/81.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/80.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/81.png" width="100%">
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="imgs/correct/90.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/correct/91.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/90.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/incorrect/91.png" width="100%">
+    </div>
+</div>
+<h4>Learned Filters:</h4>
+<p>The following are the 32 learned filters for the first layer of the network. It is difficult to find any 
+    meaning in these filters.
+</p>
+<img src="imgs/filters.png">
+
+<h2>Part 2: Semantic Segmentation</h2>
+<p>This part of the project involved semantic segmentation of a dataset of facade images. Semantic 
+    segmentation is the labeling of each pixel in an image with its correct object class. In this case, 
+    we will be classifying parts of facade images in 5 different classes:
+</p>
+<img width="20%" src="imgs/classes.JPG">
+<h4>Model Architecture:</h4>
+    <p>We used a network of 6 convolutional layers described as follows:
+        <ol>
+            <li>1. Use a 5x5 convolutional layer to go from 3 to 128 channels.</li>
+            <li>2. Apply a ReLU.</li>
+            <li>3. Apply a 2x2 max pooling layer.</li>
+            <li>4. Use a 3x3 convolutional layer to go from 128 to 256 channels.</li>
+            <li>5. Apply a ReLU.</li>
+            <li>6. Apply a 2x2 max pooling layer.</li>
+            <li>7. Use a 3x3 convolutional layer to go from 256 to 512 channels.</li>
+            <li>8. Apply a ReLU.</li>
+            <li>9. Apply a 2x2 max pooling layer.</li>
+            <li>10. Use a 5x5 transposed convolutional layer with stride 2 to go from 512 to 256 channels.</li>
+            <li>11. Use a 3x3 transposed convolutional layer with stride 2 to go from 256 to 128 channels.</li>
+            <li>12. Apply a ReLU.</li>
+            <li>13. Use a 3x3 transposed convolutional layer with stride 2 and output padding 1 to go from 128 to 5 channels.</li>
+        </ol>
+    </p>
+    <p>
+        Additionally, cross entropy loss was used and Adam was used as the optimizer with learning rate 8e-5 and weight 
+        decay 1e-5. The network was trained for 45 epochs. The following is a plot showing both training and validation loss across iterations:
+    </p>
+    <img width="35%" src="imgs/loss_seg.png">
+<h4>Average Precision:</h4>
+<p>
+    The average precision for each class on the test data was as follows. The network seemed to have a particularly 
+    hard time correctly finding pillars. Overall AP ended up being around 0.61.
+</p>
+<br>
+<table>
+    <tr>
+        <th>Class</th>
+        <th>AP</th>
+    </tr>
+    <tr>
+        <td>Others</td>
+        <td>0.67</td>
+    </tr>
+    <tr>
+        <td>Facade</td>
+        <td>0.75</td>
+    </tr>
+    <tr>
+        <td>Pillar</td>
+        <td>0.20</td>
+    </tr>
+    <tr>
+        <td>Window</td>
+        <td>0.85</td>
+    </tr>
+    <tr>
+        <td>Balcony</td>
+        <td>0.56</td>
+    </tr>
+    <tr>
+        <td>All</td>
+        <td>0.61</td>
+    </tr>
+</table>
+<h4>Results:</h4>
+<p>Here are the results on some of the images from the test dataset:</p>
+<br>
+<div class="row">
+    <div class="column">
+        <img src="output_test/x33.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="output_test/gt33.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="output_test/y33.png" width="100%"/>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="output_test/x21.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="output_test/gt21.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="output_test/y21.png" width="100%"/>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="output_test/x95.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="output_test/gt95.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="output_test/y95.png" width="100%"/>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <img src="output_test/x113.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="output_test/gt113.png" width="100%">
+    </div>
+    <div class="column">
+        <img src="output_test/y113.png" width="100%"/>
+    </div>
+</div>
+<br>
+<p>
+    It seems that the network oftentimes confuses the decorated exterior window ledges for balconies. 
+    It also confuses vertical shapes with pillars, explaining the low AP of .20 for pillars. 
+    The network does seem rather good at identifying windows, explaining the high AP value of .85 for windows.
+</p>
+<br>
+<p>The following is the output of running the trained model on an image I took of South Hall at UC Berkeley:</p>
+<br>
+<div class="row">
+    <div class="column">
+        <img src="imgs/x82.png" width="100%"/>
+    </div>
+    <div class="column">
+        <img src="imgs/y82.png" width="100%">
+    </div>
+</div>
+<br>
+<p>It gets all the windows right, but also falsely labels all the doors as windows. I'm unsure if they can be classified as 
+    windows or not, given that they are all see-through doors. I'm not sure what can be classified as a pillar, but it seems 
+    that it correctly classified the two main pillars around the entrance. For some reason, the network classified some parts of the 
+    top of the building as a balcony despite there being none. Furthermore it classifies the step area as a balcony when it should not 
+    have. The network also classified the grass as a facade when it should have been other. There are also small locations 
+    where the network classified structures as pillars incorrectly.
+</p>
+
+
+<h3>Challenges</h3>
+<p>
+    I found this whole project rather difficult, both conceptually and implementation-wise. I have virtually no 
+    background in machine learning, so it was hard to understand anything in depth. I ended up having to rely 
+    heavily on online tutorials and more knowledgable friends.
+</p>
+
+<h3>Conclusion</h3>
+<p>
+    Despite challenges stated above, I found it very cool to see the output after training. I also rather enjoyed
+    improving my network over time, and liked looking at the output created by the network in the semantic segmentation 
+    part of the project. Overall, I would say I have a better understanding of how these neural network architectures 
+    are implemented in code, but I would still like a deeper understanding of what is happening.
+</p>
+<br>
+
+    
+  <footer></footer>
+</div>
+
+  <style>
+    table {
+        margin: auto;
+        border-collapse: collapse;
+        max-width: 60%;
+        }
+
+        td, th {
+        border: none;
+        text-align: center;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #F5F5F5;
+        }
+    .row {
+      margin: auto;
+      display: flex;
+      max-width: 60%
+    }
+
+    iframe {
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+
+    .column {
+      flex: 100%;
+      padding: 5px;
+    }
+
+    .post {
+      margin-top: 125px;
+      /* overflow: auto; */
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 3rem
+    }
+
+    .date {
+      margin-bottom: 2rem color: #aaa;
+      font-weight: 320;
+      font-size: 1.4rem;
+      text-align: center;
+      display: block;
+      margin-bottom: 6rem;
+      letter-spacing: 1px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 40px auto;
+      text-decoration: none;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #222;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      width: 50%;
+    }
+
+    code {
+      background-color: #F5F5F5;
+      border-radius: 2px;
+    }
+
+    a {
+      color: #5694f1;
+      text-decoration: none;
+      font-weight: 310;
+      width: 80%;
+      margin: auto;
+    }
+
+    p {
+      line-height: 1.7;
+      color: #666;
+      font-weight: 320;
+      margin-bottom: 20px;
+      letter-spacing: .4px;
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      width: 60%;
+      margin: auto;
+    }
+
+    ol li {
+      line-height: 1.7;
+      color: #666;
+      font-weight: 320;
+      margin-bottom: 20px;
+      letter-spacing: .4px;
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      width: 60%;
+      margin: auto;
+    }
+
+    .item {
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 1.1rem;
+      background: #ededed;
+      color: #666;
+      letter-spacing: 1px;
+      margin: 3px 1px;
+      text-decoration: none;
+      display: inline-block
+    }
+
+    footer {
+      padding-bottom: 5%;
+    }
+
+    img {
+      padding-top: 2%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 60vw;
+    }
+
+    #details {
+      font-weight: normal;
+    }
+
+    figcaption {
+      text-align: center;
+      padding-top: 2px;
+      font-style: italic;
+      font-weight: lighter;
+      max-width: 40%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+
+</body>
+
+</html>
